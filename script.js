@@ -7,48 +7,48 @@ const currentUvEl = document.querySelector(".current-UV");
 
 const boxContainer = document.querySelector(".multi-day-container");
 
+const searchBtn = document.querySelector(".search-btn");
+const cityInputEl = document.querySelector(".city-input");
+
 const buttonContainer = document.querySelector(".radio-container");
 
-const defaultButtons = ["Adelaide", "Melbourne", "Sydney", "Brisbane", "Perth", "Hobart", "Darwin", "Canberra"];
+const defaultButtons = ["adelaide", "melbourne", "sydney", "brisbane", "perth", "hobart", "darwin", "canberra"];
 
 const APIKey = "286db46d0db82e1ffb5fc302efdbc0da";
 let queryCity = "adelaide";
 
 let currentCityCoords = {lat: "-37.81", lon: "144.96"};
 
-let queryURLWeather = `https://api.openweathermap.org/data/2.5/weather?q=${queryCity}&appid=${APIKey}&units=metric`;
-
-let queryURLUV = `https://api.openweathermap.org/data/2.5/uvi?appid=${APIKey}&lat=${currentCityCoords.lat}&lon=${currentCityCoords.lon}`;
-
-let queryURLForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${queryCity}&appid=${APIKey}&units=metric`;
-
-let queryURLLatLon = `https://api.openweathermap.org/data/2.5/weather?lat=${currentCityCoords.lat}&lon=${currentCityCoords.lon}&appid=${APIKey}&units=metric`;
 
 const createButtons = (cityArray) => {
     cityArray.forEach((city) => {
-        let radioWrapper = document.createElement("div");
-
-        let newRadio = document.createElement("input");
-        newRadio.setAttribute("type", "radio");
-        newRadio.setAttribute("name", "city");
-        newRadio.setAttribute("value", city);
-        newRadio.setAttribute("id", city);
-        
-        let newRadioLabel = document.createElement("label");
-        newRadioLabel.setAttribute("for", city);
-        newRadioLabel.innerText = city;
-
-        radioWrapper.appendChild(newRadio);
-        radioWrapper.appendChild(newRadioLabel);
-
-        buttonContainer.appendChild(radioWrapper);
-
-        
+        createRadio(city, false);        
     });
-
+    
     //Check adelaide button by default
-    document.querySelector(".radio-container input[value=Adelaide]").checked = true;
+    document.querySelector(".radio-container input[value=adelaide]").checked = true;
+    
+}
 
+const createRadio = (city, checked) => {
+    let radioWrapper = document.createElement("div");
+    
+    let newRadio = document.createElement("input");
+    newRadio.setAttribute("type", "radio");
+    newRadio.setAttribute("name", "city");
+    newRadio.setAttribute("value", city);
+    newRadio.setAttribute("id", city);
+    
+    let newRadioLabel = document.createElement("label");
+    newRadioLabel.setAttribute("for", city);
+    newRadioLabel.innerText = capitaliser(city);
+    
+    radioWrapper.appendChild(newRadio);
+    radioWrapper.appendChild(newRadioLabel);
+    
+    buttonContainer.appendChild(radioWrapper);
+
+    newRadio.checked = checked;
 }
 
 const handleError = (xhr, status, error) => {
@@ -57,9 +57,21 @@ const handleError = (xhr, status, error) => {
 
 const queryApi = () => {
     
+    //Update urls
+    let queryURLWeather = `https://api.openweathermap.org/data/2.5/weather?q=${queryCity}&appid=${APIKey}&units=metric`;
+    
+    let queryURLForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${queryCity}&appid=${APIKey}&units=metric`;
+    
     //Query for Main weather details then fill page
     apiCall(queryURLWeather, (response) => {
         console.log(response);
+
+        //If new city then add new radio button
+        let currentBtns = getCurrentButtons();
+
+        if(!currentBtns.includes(queryCity)){
+            createRadio(queryCity, true);
+        }
         
         cityTitleEl.innerText = response.name;
         currentDateEl.innerText = moment(response.dt,'X' ).format('DD/MM/YYYY');
@@ -81,6 +93,11 @@ const queryApi = () => {
 
         apiCall(queryURLForecast, (response) => {
             console.log(response);
+
+            //clear current boxes
+            while(boxContainer.childElementCount){
+                boxContainer.removeChild(boxContainer.childNodes[0]);
+            }
 
             let intervals = response.list;
 
@@ -138,6 +155,8 @@ const queryApi = () => {
 
         });
 
+    }, (xhr, status, error) => {
+        console.log(`Sorry, ${capitaliser(queryCity)} not found`);
     });
 
 
@@ -184,12 +203,36 @@ const parseIcon = (stringDesc) => {
     return "Icon here";
 }
 
-const apiCall = (url, successFn) => {
+const capitaliser = (input) => {
+    return input.replace(/\b\w/g,l => l.toUpperCase());
+}
+
+const getCurrentButtons = () => {
+    return Array.from(document.querySelectorAll(".radio-container input")).map(input => input.value.toLowerCase());
+}
+
+const searchCity = (event) => {
+    let cityInput = cityInputEl.value.toLowerCase();
+    
+    let currentButtons = getCurrentButtons();
+
+    if(currentButtons.includes(cityInput)){
+        document.querySelector(`.radio-container input[value="${cityInput}"]`).checked = true;
+    }
+    
+    queryCity = cityInput;
+    queryApi();
+
+
+    console.log(currentButtons);
+}
+
+const apiCall = (url, successFn, errorFn) => {
     $.ajax({
         url: url,
         method: "GET",
         success: successFn,
-        error: handleError
+        error: errorFn
     });
 }
 
@@ -200,6 +243,9 @@ const pageLoad = () => {
 }
 
 pageLoad();
+
+searchBtn.addEventListener("click", searchCity);
+
 
 // setTimeout( () => {
 //     apiCall(queryURLLatLon, handleSuccessWeather);
