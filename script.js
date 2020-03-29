@@ -5,6 +5,8 @@ const currentHumidEl = document.querySelector(".current-humid");
 const currentWindEl = document.querySelector(".current-wind");
 const currentUvEl = document.querySelector(".current-UV");
 
+const boxContainer = document.querySelector(".multi-day-container");
+
 const buttonContainer = document.querySelector(".radio-container");
 
 const defaultButtons = ["Adelaide", "Melbourne", "Sydney", "Brisbane", "Perth", "Hobart", "Darwin", "Canberra"];
@@ -82,12 +84,59 @@ const queryApi = () => {
 
             let intervals = response.list;
 
-            intervals.forEach(entry => {
-                let timeOfEntry = moment(entry.dt, 'X').format('DD/MM/YYYY HH:mm');
+            //For each day, need temp, humid and icon
+            //Array of objects
 
+            let i = 0;
+            let foreCastArray = [];
+
+            intervals.forEach(entry => {
+                let timeOfEntry = moment(entry.dt, 'X');
+
+                if(foreCastArray[i]){
+
+                    if(foreCastArray[i].date.isSame(timeOfEntry, 'day')){
+
+                        if(foreCastArray[i].temp < entry.main.temp){
+                            foreCastArray[i] = {
+                                date: timeOfEntry,
+                                dateString: timeOfEntry.format('DD/MM/YYYY'),
+                                temp: entry.main.temp,
+                                humidity: entry.main.humidity,
+                                weather: entry.weather[0].main
+
+                            };
+                        }
+
+                    }else{
+                        i++;
+                        foreCastArray[i] = {
+                            date: timeOfEntry,
+                            dateString: timeOfEntry.format('DD/MM/YYYY'),
+                            temp: entry.main.temp,
+                            humidity: entry.main.humidity,
+                            weather: entry.weather[0].main
+                        };
+
+                    }
+
+                } else {
+                    foreCastArray[i] = {
+                        date: timeOfEntry,
+                        dateString: timeOfEntry.format('DD/MM/YYYY'),
+                        temp: entry.main.temp,
+                        humidity: entry.main.humidity,
+                        weather: entry.weather[0].main
+                    };
+                }
+                
                 console.log(`Date: ${timeOfEntry}, Temperature: ${entry.main.temp}`);
             })
-        })
+            console.log(foreCastArray);
+
+            createBoxes(foreCastArray);
+
+        });
 
     });
 
@@ -97,6 +146,42 @@ const queryApi = () => {
 
     //Query for main weather card
     
+}
+
+const createBoxes = (foreCastArray) => {
+
+    foreCastArray.forEach(dateEntry => {
+        console.log(dateEntry);
+
+        let container = document.createElement("div");
+        container.classList.add("day-container");
+
+        let boxHeading = document.createElement("h3");
+        boxHeading.classList.add("box-heading");
+        boxHeading.innerText = dateEntry.date.format('dddd');
+        container.appendChild(boxHeading);
+        
+        let boxIcon = document.createElement("p");
+        boxIcon.innerText = parseIcon(dateEntry.weather);
+        container.appendChild(boxIcon);
+        
+        let boxTemp = document.createElement("p");
+        boxTemp.classList.add("box-temp");
+        boxTemp.innerText = dateEntry.temp;
+        container.appendChild(boxTemp);
+        
+        let boxHumid = document.createElement("p");
+        boxHumid.classList.add("box-temp");
+        boxHumid.innerText = dateEntry.humidity;
+        container.appendChild(boxHumid);
+        
+        boxContainer.appendChild(container);
+
+    });
+}
+
+const parseIcon = (stringDesc) => {
+    return "Icon here";
 }
 
 const apiCall = (url, successFn) => {
