@@ -28,6 +28,7 @@ body {
     background-color: var(--background-colour);
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 header {
@@ -192,10 +193,35 @@ main {
     margin: 10px;
 }
 
+.footer-spacer {
+    width: 1px;
+    height: 80px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 150px;
+    height: 40px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 5px 5px 10px var(--shadow-light-colour), 
+                -5px -5px 10px var(--shadow-dark-colour);
+    border-radius: 20px 20px 0 0;
+    background-color: var(--background-colour);
+    transform: translate(-50%);
+}
+
 @media only screen and (max-width: 768px){
     body {
         width: 100vw;
     }
+
+    header{
+        margin: 10px;
+    }
+
     main {
         flex-direction: column;
     }
