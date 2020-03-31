@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    min-height: 100vh;
+}
+
+header {
+    padding: 15px 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    width: 100%;
+}
+
+.search-container {
+
+}
+
+.weather-container {
+    flex-grow: 1;
+}
+
+.today-container {
+    display: flex;
+    justify-content: center;
+}
+
+.multi-day-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}

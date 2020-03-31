@@ -38,6 +38,7 @@ const createRadio = (city, checked) => {
     newRadio.setAttribute("name", "city");
     newRadio.setAttribute("value", city);
     newRadio.setAttribute("id", city);
+    newRadio.addEventListener('change', radioChangeHandler);
     
     let newRadioLabel = document.createElement("label");
     newRadioLabel.setAttribute("for", city);
@@ -225,6 +226,16 @@ const searchCity = (event) => {
 
 
     console.log(currentButtons);
+}
+
+const radioChangeHandler = (event) => {
+    console.log(event);
+    if (queryCity == event.target.value){
+
+    } else {
+        queryCity = event.target.value;
+        queryApi();
+    }
 }
 
 const apiCall = (url, successFn, errorFn) => {
