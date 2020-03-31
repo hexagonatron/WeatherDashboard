@@ -95,7 +95,7 @@ const queryApi = () => {
         cityTitleEl.innerText = response.name;
         currentDateEl.innerText = moment(response.dt,'X' ).format('DD/MM/YYYY');
         currentDayEl.innerText = moment(response.dt,'X' ).format('dddd');
-        currentIconEl.setAttribute("src", `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
+        currentIconEl.setAttribute("src", `https://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
         currentTempEl.innerText = response.main.temp.toFixed(0);
         currentHumidEl.innerText = response.main.humidity + " %";
         currentWindEl.innerText = response.wind.speed + " m/s";
