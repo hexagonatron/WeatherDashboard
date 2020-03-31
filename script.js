@@ -104,7 +104,7 @@ const queryApi = () => {
         currentCityCoords.lon = response.coord.lon;
 
         //Update uv url with coords from api response
-        queryURLUV = `http://api.openweathermap.org/data/2.5/uvi?appid=${APIKey}&lat=${currentCityCoords.lat}&lon=${currentCityCoords.lon}`;
+        queryURLUV = `https://api.openweathermap.org/data/2.5/uvi?appid=${APIKey}&lat=${currentCityCoords.lat}&lon=${currentCityCoords.lon}`;
 
         //Query for UV index then fill page
         apiCall(queryURLUV, (response) => {
@@ -212,7 +212,7 @@ const createBoxes = (foreCastArray) => {
         container.appendChild(boxHeading);
         
         let boxIcon = document.createElement("img");
-        boxIcon.setAttribute("src", `http://openweathermap.org/img/wn/${dateEntry.weather}@2x.png`);
+        boxIcon.setAttribute("src", `https://openweathermap.org/img/wn/${dateEntry.weather}@2x.png`);
         container.appendChild(boxIcon);
         
         let boxTemp = document.createElement("p");
