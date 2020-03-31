@@ -17,7 +17,7 @@ const buttonContainer = document.querySelector(".radio-container");
 const defaultButtons = ["adelaide", "melbourne", "sydney", "brisbane", "perth", "hobart", "darwin", "canberra"];
 
 const APIKey = "286db46d0db82e1ffb5fc302efdbc0da";
-let queryCity = localStorage.getItem("last-city")||"adelaide";
+let queryCity = localStorage.getItem("last-city")?localStorage.getItem("last-city"):"adelaide";
 
 let currentCityCoords = {lat: "-37.81", lon: "144.96"};
 
