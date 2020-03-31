@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Roboto:wght@900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6213180c78.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./style.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 </head>
@@ -14,7 +16,9 @@
     <main>
         <div class="search-container">
             <div class="box-container">
-                <input type="text" class="city-input" placeholder="Please enter a city"> <button class="search-btn">Search</button>
+                <form action="submit" method="post">
+                    <input type="text" class="city-input" placeholder="Please enter a city"> <button class="search-btn"><i class="fas fa-search"></i></button>
+                </form>
             </div>
             <div class="radio-container">
         
@@ -24,8 +28,10 @@
             <div class="today-container">
                 <div class="today-forecast">
                     <h1 class="current-city"></h1>
-                    <h3 class="current-date"></h3>
-                    <p>Temp: <span class="current-temp"></span></p>
+                    <h3 class="current-day"></h3>
+                    <p class="current-date"></p>
+                    <p><img class="current-icon" src="" alt=""></p>
+                    <p class="current-temp-full"><span class="current-temp"></span>°C</p>
                     <p>Humidity: <span class="current-humid"></span></p>
                     <p>Wind Speed: <span class="current-wind"></span></p>
                     <p>UV Index: <span class="current-UV"></span></p>

@@ -1,16 +1,46 @@
+/* CSS Colour variables */
+
+:root {
+    --background-colour: #1e2023;
+    --text-highlight-colour: #fb5764;
+    --text-colour: #d2d2d6;
+    --shadow-light-colour: #121415;
+    --shadow-dark-colour: #2a2c31;
+}
+
 * {
     margin: 0;
     padding: 0;
+    color: var(--text-colour);
+}
+
+h1, h2, h3{
+    font-family: 'Roboto', sans-serif;
+    color: var(--text-highlight-colour);
 }
 
 body {
-    width: 100vw;
     min-height: 100vh;
+    width: 100vw;
+    max-width: 100%;
+    overflow-x: hidden;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background-colour);
+    display: flex;
+    flex-direction: column;
 }
 
 header {
     padding: 15px 20px;
     text-align: center;
+    margin-bottom: 40px;
+    margin-top: 40px;
+}
+
+header h1 {
+    font-weight: bolder;
+    font-size: 50px;
+    color: var(--text-highlight-colour);
 }
 
 main {
@@ -18,23 +48,185 @@ main {
     flex-direction: row;
     justify-content: left;
     width: 100%;
+    height: 100%;
+    flex-grow: 1;
 }
 
 .search-container {
+    padding: 20px 20px 0 20px;
+    align-self: stretch;
+    border-radius: 0 20px 0 0;
+    box-shadow: inset 22px 22px 37px var(--shadow-light-colour), 
+                inset -22px -22px 37px var(--shadow-dark-colour);
+    margin-right: 20px;
+}
+
+.box-container>form{
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.city-input {
+    flex-shrink: 1;
+    background-color: var(--background-colour);
+    border: none;
+    color: white;
+    box-shadow: inset 2px 2px 3px var(--shadow-light-colour), 
+                inset -2px -2px 3px var(--shadow-dark-colour);
+    border-radius: 7px;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.search-btn {
+    border: none;
+    box-sizing: border-box;
+    height: 36px;
+    width: 35px;
+    border-radius: 0 5px 5px 0;
+    padding: 3px;
+    background-color: var(--text-highlight-colour);
+    cursor: pointer;
 
 }
 
+.radio-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.radio-container>div {
+    height: 40px;
+    margin: 8px;
+}
+
+.radio-container label {
+    width: 100%;
+    border-radius: 25px;
+    cursor: pointer;
+    background: linear-gradient(145deg, #1b1d20, #202225);
+    box-shadow:  5px 5px 10px #0e0f10, 
+             -5px -5px 10px #2e3136;
+    padding: 10px 15px;
+    
+}
+
+.radio-container label:hover {
+    color: var(--text-highlight-colour);
+}
+
+.radio-container input[type="radio"]:checked+label{
+    box-shadow: inset 5px 5px 10px #0e0f10, 
+                inset -5px -5px 10px #2e3136;
+    color: var(--text-highlight-colour);
+}
+
+.radio-container input[type="radio"] {
+    visibility: hidden;
+}
+
+
+
 .weather-container {
     flex-grow: 1;
+    border-radius: 20px 0 0 0;
+    box-shadow: inset 22px 22px 37px var(--shadow-light-colour), 
+                inset -22px -22px 37px var(--shadow-dark-colour);
+    padding: 20px;
 }
 
 .today-container {
     display: flex;
     justify-content: center;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+}
+
+.today-forecast {
+    border-radius: 20px;
+    padding: 30px 80px 30px 80px;
+    width: 384px;
+    box-shadow: 22px 22px 37px var(--shadow-light-colour), 
+                -22px -22px 37px var(--shadow-dark-colour);
+    text-align: center;
+}
+
+.today-forecast>* {
+    margin-bottom: 5px;
+}
+
+.current-city {
+    font-weight: bold;
+    color: var(--text-highlight-colour) ;
+    margin-bottom: 4px;
+}
+
+.current-day {
+    color: var(--text-highlight-colour);
+}
+
+.current-temp-full {
+    font-size: 36px;
+}
+
+.current-temp {
+    font-weight: bold;
 }
 
 .multi-day-container {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.day-container {
+    border-radius: 20px;
+    padding: 20px;
+    width: 161px;
+    height: 161px;
+    box-shadow: 22px 22px 37px var(--shadow-light-colour), 
+                -22px -22px 37px var(--shadow-dark-colour);
+    margin: 10px;
+}
+
+@media only screen and (max-width: 768px){
+    body {
+        width: 100vw;
+    }
+    main {
+        flex-direction: column;
+    }
+
+    .search-container {
+        align-self: normal;
+        border-radius: 20px;
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .box-container>form {
+        display: flex;
+        justify-content: center;
+    }
+
+    .radio-container{
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .radio-container>div {
+        height: 35px;
+    }
+
+    .weather-container {
+        margin: 20px;
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+
 }

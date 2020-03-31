@@ -1,5 +1,7 @@
 const cityTitleEl = document.querySelector(".current-city");
 const currentDateEl = document.querySelector(".current-date");
+const currentDayEl = document.querySelector(".current-day");
+const currentIconEl = document.querySelector(".current-icon");
 const currentTempEl = document.querySelector(".current-temp");
 const currentHumidEl = document.querySelector(".current-humid");
 const currentWindEl = document.querySelector(".current-wind");
@@ -73,10 +75,20 @@ const queryApi = () => {
         if(!currentBtns.includes(queryCity)){
             createRadio(queryCity, true);
         }
+
+        if(cityInputEl.value){
+            if(cityInputEl.value.toLowerCase() == queryCity.toLowerCase()){
+                cityInputEl.value = "";
+            }
+        }
+        
+            
         
         cityTitleEl.innerText = response.name;
         currentDateEl.innerText = moment(response.dt,'X' ).format('DD/MM/YYYY');
-        currentTempEl.innerText = response.main.temp + "°C";
+        currentDayEl.innerText = moment(response.dt,'X' ).format('dddd');
+        currentIconEl.setAttribute("src", `http://openweathermap.org/img/wn/${response.weather[0].icon}@2x.png`)
+        currentTempEl.innerText = response.main.temp.toFixed(0);
         currentHumidEl.innerText = response.main.humidity + " %";
         currentWindEl.innerText = response.wind.speed + " m/s";
 
@@ -121,7 +133,7 @@ const queryApi = () => {
                                 dateString: timeOfEntry.format('DD/MM/YYYY'),
                                 temp: entry.main.temp,
                                 humidity: entry.main.humidity,
-                                weather: entry.weather[0].main
+                                weather: entry.weather[0].icon
 
                             };
                         }
@@ -133,18 +145,18 @@ const queryApi = () => {
                             dateString: timeOfEntry.format('DD/MM/YYYY'),
                             temp: entry.main.temp,
                             humidity: entry.main.humidity,
-                            weather: entry.weather[0].main
+                            weather: entry.weather[0].icon
                         };
 
                     }
 
-                } else {
+                } else if(timeOfEntry.isAfter(moment(), 'day')){
                     foreCastArray[i] = {
                         date: timeOfEntry,
                         dateString: timeOfEntry.format('DD/MM/YYYY'),
                         temp: entry.main.temp,
                         humidity: entry.main.humidity,
-                        weather: entry.weather[0].main
+                        weather: entry.weather[0].icon
                     };
                 }
                 
@@ -181,18 +193,18 @@ const createBoxes = (foreCastArray) => {
         boxHeading.innerText = dateEntry.date.format('dddd');
         container.appendChild(boxHeading);
         
-        let boxIcon = document.createElement("p");
-        boxIcon.innerText = parseIcon(dateEntry.weather);
+        let boxIcon = document.createElement("img");
+        boxIcon.setAttribute("src", `http://openweathermap.org/img/wn/${dateEntry.weather}@2x.png`);
         container.appendChild(boxIcon);
         
         let boxTemp = document.createElement("p");
         boxTemp.classList.add("box-temp");
-        boxTemp.innerText = dateEntry.temp;
+        boxTemp.innerText = dateEntry.temp.toFixed(0) + "°C";
         container.appendChild(boxTemp);
         
         let boxHumid = document.createElement("p");
         boxHumid.classList.add("box-temp");
-        boxHumid.innerText = dateEntry.humidity;
+        boxHumid.innerText = "Humidity: "+ dateEntry.humidity + "%";
         container.appendChild(boxHumid);
         
         boxContainer.appendChild(container);
@@ -213,6 +225,7 @@ const getCurrentButtons = () => {
 }
 
 const searchCity = (event) => {
+    event.preventDefault();
     let cityInput = cityInputEl.value.toLowerCase();
     
     let currentButtons = getCurrentButtons();
