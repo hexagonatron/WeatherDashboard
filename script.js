@@ -17,7 +17,7 @@ const buttonContainer = document.querySelector(".radio-container");
 const defaultButtons = ["adelaide", "melbourne", "sydney", "brisbane", "perth", "hobart", "darwin", "canberra"];
 
 const APIKey = "286db46d0db82e1ffb5fc302efdbc0da";
-let queryCity = "adelaide";
+let queryCity = localStorage.getItem("last-city")||"adelaide";
 
 let currentCityCoords = {lat: "-37.81", lon: "144.96"};
 
@@ -26,9 +26,15 @@ const createButtons = (cityArray) => {
     cityArray.forEach((city) => {
         createRadio(city, false);        
     });
+
+    let lastCity = localStorage.getItem("last-city");
+    
+    if(!document.querySelector(`.radio-container input[value=${lastCity}]`)){
+        createRadio(lastCity, false);
+    }
     
     //Check adelaide button by default
-    document.querySelector(".radio-container input[value=adelaide]").checked = true;
+    document.querySelector(`.radio-container input[value=${queryCity}]`).checked = true;
     
 }
 
@@ -72,6 +78,8 @@ const queryApi = () => {
         //If new city then add new radio button
         let currentBtns = getCurrentButtons();
 
+        localStorage.setItem("last-city", queryCity);
+
         if(!currentBtns.includes(queryCity)){
             createRadio(queryCity, true);
         }
@@ -101,7 +109,17 @@ const queryApi = () => {
         //Query for UV index then fill page
         apiCall(queryURLUV, (response) => {
             console.log(response);
-            currentUvEl.innerText = response.value;
+            let uvValue = +response.value;
+            let uvRatingColour = uvValue<2
+                ?"green"
+                :uvValue<5
+                    ?"yellow"
+                    :uvValue<7
+                        ?"orange"
+                        :uvValue<10
+                            ?"red"
+                            :"crimson";
+            currentUvEl.innerHTML = `<span style="color:${uvRatingColour}">${uvValue}</span>`;
         });
 
         apiCall(queryURLForecast, (response) => {
