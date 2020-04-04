@@ -29,7 +29,7 @@ const createButtons = (cityArray) => {
 
     let lastCity = localStorage.getItem("last-city");
     
-    if(!document.querySelector(`.radio-container input[value=${lastCity}]`)){
+    if(!document.querySelector(`.radio-container input[value=${lastCity}]`) && lastCity){
         createRadio(lastCity, false);
     }
     
