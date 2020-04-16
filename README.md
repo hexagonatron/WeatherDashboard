@@ -1,4 +1,4 @@
-# Daily Planner
+# Weather Dashboard
 
 [View here](https://hexagonatron.github.io/WeatherDashboard/)
 
